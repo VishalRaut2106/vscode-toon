@@ -125,10 +125,13 @@ Learn more:
 Contributions are welcome! Please visit:
 - [GitHub Repository](https://github.com/vishalraut2106/vscode-toon)
 - [Issue Tracker](https://github.com/vishalraut2106/vscode-toon/issues)
+<<<<<<< HEAD
 
 ## Author
 
 Created by [Vishal Raut](https://github.com/vishalraut2106)
+=======
+>>>>>>> f18728c0167ec827c52bec6054ab3a031c01cc31
 
 ## License
 
