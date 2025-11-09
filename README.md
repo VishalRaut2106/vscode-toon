@@ -115,8 +115,8 @@ TOON (Token-Oriented Object Notation) is a compact, human-readable serialization
 ## Contributing
 
 Contributions are welcome! Please visit:
-- [GitHub Repository](https://github.com/toon-format/vscode-toon)
-- [Issue Tracker](https://github.com/toon-format/vscode-toon/issues)
+- [GitHub Repository](https://github.com/vishalraut2106/vscode-toon)
+- [Issue Tracker](https://github.com/vishalraut2106/vscode-toon/issues)
 
 ## License
 
