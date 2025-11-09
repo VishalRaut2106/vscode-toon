@@ -1,6 +1,8 @@
-# TOON Language Support for VS Code
+# TOON - Token-Efficient Data Format for VS Code
 
-Syntax highlighting, validation, and formatting for TOON (Token-Oriented Object Notation) files.
+Complete language support for TOON (Token-Oriented Object Notation) - a compact, LLM-friendly data format that reduces token usage by 30-60% compared to JSON.
+
+Perfect for developers working with Large Language Models who want to minimize API costs while maintaining data clarity.
 
 ## Features
 
@@ -31,11 +33,11 @@ Syntax highlighting, validation, and formatting for TOON (Token-Oriented Object 
 
 ## Installation
 
-1. Install from VS Code Marketplace (coming soon)
-2. Or install from VSIX file:
-   ```bash
-   code --install-extension vscode-toon-0.1.0.vsix
-   ```
+Search for "TOON" in the VS Code Extensions marketplace, or install directly:
+
+```bash
+code --install-extension vishalraut.vscode-toon
+```
 
 ## Usage
 
@@ -104,20 +106,30 @@ config:
     enabled: true
 ```
 
-## About TOON
+## Why TOON?
 
-TOON (Token-Oriented Object Notation) is a compact, human-readable serialization format designed for passing structured data to Large Language Models with significantly reduced token usage.
+TOON (Token-Oriented Object Notation) is designed for developers working with LLMs who want to:
+- **Save money** on API costs by reducing token usage
+- **Maintain clarity** with human-readable structured data
+- **Optimize prompts** for better LLM performance
 
+**Token Savings:** 30-60% reduction vs JSON on typical datasets
+
+Learn more:
 - 📖 [Documentation](https://github.com/toon-format/toon)
 - 📋 [Specification](https://github.com/toon-format/spec)
-- 🌐 [Website](https://toonformat.dev)
+- 🎮 [Interactive Playground](https://www.curiouslychase.com/playground/format-tokenization-exploration)
 
 ## Contributing
 
 Contributions are welcome! Please visit:
-- [GitHub Repository](https://github.com/toon-format/vscode-toon)
-- [Issue Tracker](https://github.com/toon-format/vscode-toon/issues)
+- [GitHub Repository](https://github.com/vishalraut2106/vscode-toon)
+- [Issue Tracker](https://github.com/vishalraut2106/vscode-toon/issues)
+
+## Author
+
+Created by [Vishal Raut](https://github.com/vishalraut2106)
 
 ## License
 
-MIT License © 2025 TOON Format Contributors
+MIT License © 2025 Vishal Raut

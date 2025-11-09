@@ -8,3 +8,9 @@ src/**
 !out/**/*.js
 node_modules/**
 *.vsix
+NEXT_STEPS.md
+PUBLISH_FREE.md
+toon.jpg
+tsconfig.json
+package-lock.json
+.git/**
