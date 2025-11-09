@@ -1,4 +1,5 @@
 import * as vscode from 'vscode'
+import { decode, encode } from '@toon-format/toon'
 
 export class ToonFormatter implements vscode.DocumentFormattingEditProvider {
   async provideDocumentFormattingEdits(
@@ -6,9 +7,14 @@ export class ToonFormatter implements vscode.DocumentFormattingEditProvider {
     options: vscode.FormattingOptions,
     token: vscode.CancellationToken
   ): Promise<vscode.TextEdit[]> {
+    const text = document.getText().trim()
+
+    // Skip formatting for empty documents
+    if (!text) {
+      return []
+    }
+
     try {
-      const { decode, encode } = await import('@toon-format/toon')
-      const text = document.getText()
       const config = vscode.workspace.getConfiguration('toon.format')
 
       // Decode and re-encode to format
@@ -22,7 +28,7 @@ export class ToonFormatter implements vscode.DocumentFormattingEditProvider {
       // Replace entire document
       const fullRange = new vscode.Range(
         document.positionAt(0),
-        document.positionAt(text.length)
+        document.positionAt(document.getText().length)
       )
 
       return [vscode.TextEdit.replace(fullRange, formatted)]

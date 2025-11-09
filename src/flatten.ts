@@ -26,19 +26,25 @@ export function flattenObject(
   function flatten(current: any, prefix: string = '', depth: number = 0): void {
     // Stop if max depth reached
     if (depth >= maxDepth) {
-      result[prefix] = current
+      result[prefix || 'root'] = current
       return
     }
 
     // Handle null/undefined
     if (current === null || current === undefined) {
-      result[prefix] = current
+      result[prefix || 'value'] = current
       return
     }
 
     // Handle arrays - keep as is (don't flatten)
     if (Array.isArray(current)) {
-      result[prefix] = current
+      result[prefix || 'array'] = current
+      return
+    }
+
+    // Handle Date objects
+    if (current instanceof Date) {
+      result[prefix || 'date'] = current.toISOString()
       return
     }
 
@@ -48,19 +54,21 @@ export function flattenObject(
       
       // Empty object
       if (keys.length === 0) {
-        result[prefix] = {}
+        result[prefix || 'object'] = {}
         return
       }
 
       // Flatten each property
       for (const key of keys) {
-        const newPrefix = prefix ? `${prefix}${separator}${key}` : key
+        // Escape dots in keys to avoid conflicts
+        const escapedKey = key.replace(/\./g, '\\.')
+        const newPrefix = prefix ? `${prefix}${separator}${escapedKey}` : escapedKey
         flatten(current[key], newPrefix, depth + 1)
       }
     }
     else {
       // Primitive value
-      result[prefix] = current
+      result[prefix || 'value'] = current
     }
   }
 

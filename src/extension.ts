@@ -1,6 +1,8 @@
 import * as vscode from 'vscode'
 import { ToonValidator } from './validator'
 import { ToonFormatter } from './formatter'
+import { encode, decode } from '@toon-format/toon'
+import { flattenObject, hasNestedObjects } from './flatten'
 
 export function activate(context: vscode.ExtensionContext) {
   console.log('TOON extension is now active')
@@ -52,24 +54,38 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.commands.registerCommand('toon.convertToJson', async () => {
       const editor = vscode.window.activeTextEditor
-      if (editor && editor.document.languageId === 'toon') {
-        try {
-          const { decode } = await import('@toon-format/toon')
-          const toonContent = editor.document.getText()
-          const jsonData = decode(toonContent)
-          const jsonString = JSON.stringify(jsonData, null, 2)
+      if (!editor) {
+        vscode.window.showWarningMessage('No active editor found')
+        return
+      }
 
-          const doc = await vscode.workspace.openTextDocument({
-            content: jsonString,
-            language: 'json',
-          })
-          await vscode.window.showTextDocument(doc)
+      if (editor.document.languageId !== 'toon') {
+        vscode.window.showWarningMessage('Current file is not a TOON file')
+        return
+      }
+
+      try {
+        const toonContent = editor.document.getText().trim()
+
+        if (!toonContent) {
+          vscode.window.showWarningMessage('Document is empty')
+          return
         }
-        catch (error) {
-          vscode.window.showErrorMessage(
-            `Failed to convert TOON to JSON: ${error instanceof Error ? error.message : String(error)}`
-          )
-        }
+
+        const jsonData = decode(toonContent)
+        const jsonString = JSON.stringify(jsonData, null, 2)
+
+        const doc = await vscode.workspace.openTextDocument({
+          content: jsonString,
+          language: 'json',
+        })
+        await vscode.window.showTextDocument(doc, { preview: false })
+        vscode.window.showInformationMessage('Successfully converted TOON to JSON')
+      }
+      catch (error) {
+        vscode.window.showErrorMessage(
+          `Failed to convert TOON to JSON: ${error instanceof Error ? error.message : String(error)}`
+        )
       }
     })
   )
@@ -77,61 +93,74 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.commands.registerCommand('toon.convertFromJson', async () => {
       const editor = vscode.window.activeTextEditor
-      if (editor && editor.document.languageId === 'json') {
-        try {
-          const { encode } = await import('@toon-format/toon')
-          const { flattenObject, hasNestedObjects } = await import('./flatten')
-          const jsonContent = editor.document.getText()
-          let jsonData = JSON.parse(jsonContent)
+      if (!editor) {
+        vscode.window.showWarningMessage('No active editor found')
+        return
+      }
 
-          // Check if data has nested objects
-          if (hasNestedObjects(jsonData)) {
-            const choice = await vscode.window.showQuickPick(
-              [
-                {
-                  label: '$(symbol-structure) Nested (Preserve Structure)',
-                  description: 'Keep nested objects as-is',
-                  value: 'nested',
-                },
-                {
-                  label: '$(symbol-namespace) Flattened (Save Tokens)',
-                  description: 'Flatten nested objects with dot notation (e.g., user.name)',
-                  value: 'flat',
-                },
-              ],
+      if (editor.document.languageId !== 'json') {
+        vscode.window.showWarningMessage('Current file is not a JSON file')
+        return
+      }
+
+      try {
+        const jsonContent = editor.document.getText().trim()
+
+        if (!jsonContent) {
+          vscode.window.showWarningMessage('Document is empty')
+          return
+        }
+
+        let jsonData = JSON.parse(jsonContent)
+
+        // Check if data has nested objects
+        if (hasNestedObjects(jsonData)) {
+          const choice = await vscode.window.showQuickPick(
+            [
               {
-                placeHolder: 'Choose TOON format style',
-                title: 'Convert JSON to TOON',
-              }
-            )
-
-            if (!choice) {
-              return // User cancelled
+                label: '$(symbol-structure) Nested (Preserve Structure)',
+                description: 'Keep nested objects as-is',
+                value: 'nested',
+              },
+              {
+                label: '$(symbol-namespace) Flattened (Save Tokens)',
+                description: 'Flatten nested objects with dot notation (e.g., user.name)',
+                value: 'flat',
+              },
+            ],
+            {
+              placeHolder: 'Choose TOON format style',
+              title: 'Convert JSON to TOON',
             }
+          )
 
-            if (choice.value === 'flat') {
-              jsonData = flattenObject(jsonData)
-            }
+          if (!choice) {
+            return // User cancelled
           }
 
-          const config = vscode.workspace.getConfiguration('toon.format')
-          const toonString = encode(jsonData, {
-            indent: config.get('indent', 2),
-            delimiter: config.get('delimiter', ','),
-            lengthMarker: config.get('lengthMarker', false) ? '#' : false,
-          })
+          if (choice.value === 'flat') {
+            jsonData = flattenObject(jsonData)
+          }
+        }
 
-          const doc = await vscode.workspace.openTextDocument({
-            content: toonString,
-            language: 'toon',
-          })
-          await vscode.window.showTextDocument(doc)
-        }
-        catch (error) {
-          vscode.window.showErrorMessage(
-            `Failed to convert JSON to TOON: ${error instanceof Error ? error.message : String(error)}`
-          )
-        }
+        const config = vscode.workspace.getConfiguration('toon.format')
+        const toonString = encode(jsonData, {
+          indent: config.get('indent', 2),
+          delimiter: config.get('delimiter', ','),
+          lengthMarker: config.get('lengthMarker', false) ? '#' : false,
+        })
+
+        const doc = await vscode.workspace.openTextDocument({
+          content: toonString,
+          language: 'toon',
+        })
+        await vscode.window.showTextDocument(doc, { preview: false })
+        vscode.window.showInformationMessage('Successfully converted JSON to TOON')
+      }
+      catch (error) {
+        vscode.window.showErrorMessage(
+          `Failed to convert JSON to TOON: ${error instanceof Error ? error.message : String(error)}`
+        )
       }
     })
   )
@@ -139,32 +168,45 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.commands.registerCommand('toon.convertFromJsonFlat', async () => {
       const editor = vscode.window.activeTextEditor
-      if (editor && editor.document.languageId === 'json') {
-        try {
-          const { encode } = await import('@toon-format/toon')
-          const { flattenObject } = await import('./flatten')
-          const jsonContent = editor.document.getText()
-          const jsonData = JSON.parse(jsonContent)
-          const flatData = flattenObject(jsonData)
+      if (!editor) {
+        vscode.window.showWarningMessage('No active editor found')
+        return
+      }
 
-          const config = vscode.workspace.getConfiguration('toon.format')
-          const toonString = encode(flatData, {
-            indent: config.get('indent', 2),
-            delimiter: config.get('delimiter', ','),
-            lengthMarker: config.get('lengthMarker', false) ? '#' : false,
-          })
+      if (editor.document.languageId !== 'json') {
+        vscode.window.showWarningMessage('Current file is not a JSON file')
+        return
+      }
 
-          const doc = await vscode.workspace.openTextDocument({
-            content: toonString,
-            language: 'toon',
-          })
-          await vscode.window.showTextDocument(doc)
+      try {
+        const jsonContent = editor.document.getText().trim()
+
+        if (!jsonContent) {
+          vscode.window.showWarningMessage('Document is empty')
+          return
         }
-        catch (error) {
-          vscode.window.showErrorMessage(
-            `Failed to convert JSON to TOON (flat): ${error instanceof Error ? error.message : String(error)}`
-          )
-        }
+
+        const jsonData = JSON.parse(jsonContent)
+        const flatData = flattenObject(jsonData)
+
+        const config = vscode.workspace.getConfiguration('toon.format')
+        const toonString = encode(flatData, {
+          indent: config.get('indent', 2),
+          delimiter: config.get('delimiter', ','),
+          lengthMarker: config.get('lengthMarker', false) ? '#' : false,
+        })
+
+        const doc = await vscode.workspace.openTextDocument({
+          content: toonString,
+          language: 'toon',
+        })
+        await vscode.window.showTextDocument(doc, { preview: false })
+        vscode.window.showInformationMessage('Successfully converted JSON to TOON (flattened)')
+      }
+      catch (error) {
+        vscode.window.showErrorMessage(
+          `Failed to convert JSON to TOON (flat): ${error instanceof Error ? error.message : String(error)}`
+        )
       }
     })
   )

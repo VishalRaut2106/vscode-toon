@@ -6,7 +6,6 @@ src/**
 **/*.map
 **/*.ts
 !out/**/*.js
-node_modules/**
 *.vsix
 NEXT_STEPS.md
 PUBLISH_FREE.md
