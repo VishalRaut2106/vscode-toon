@@ -1,0 +1,16 @@
+# Test TOON file
+name: Test Extension
+version: 1.0
+
+# Inline array
+tags[3]: javascript,typescript,vscode
+
+# Tabular array
+users[2]{id,name,role}:
+  1,Alice,admin
+  2,Bob,user
+
+# Nested object
+config:
+  indent: 2
+  strict: true

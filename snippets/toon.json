@@ -1,0 +1,75 @@
+{
+  "Inline Array": {
+    "prefix": "toon-array-inline",
+    "body": [
+      "${1:key}[${2:3}]: ${3:value1},${4:value2},${5:value3}"
+    ],
+    "description": "Create an inline primitive array"
+  },
+  "Tabular Array": {
+    "prefix": "toon-array-tabular",
+    "body": [
+      "${1:items}[${2:2}]{${3:id},${4:name}}:",
+      "  ${5:1},${6:Alice}",
+      "  ${7:2},${8:Bob}"
+    ],
+    "description": "Create a tabular array of objects"
+  },
+  "List Array": {
+    "prefix": "toon-array-list",
+    "body": [
+      "${1:items}[${2:2}]:",
+      "  - ${3:value1}",
+      "  - ${4:value2}"
+    ],
+    "description": "Create a list array"
+  },
+  "Object": {
+    "prefix": "toon-object",
+    "body": [
+      "${1:key}:",
+      "  ${2:field}: ${3:value}"
+    ],
+    "description": "Create a nested object"
+  },
+  "List Item Object": {
+    "prefix": "toon-list-object",
+    "body": [
+      "- ${1:key}: ${2:value}",
+      "  ${3:field}: ${4:value}"
+    ],
+    "description": "Create a list item with object"
+  },
+  "Key-Value": {
+    "prefix": "toon-kv",
+    "body": [
+      "${1:key}: ${2:value}"
+    ],
+    "description": "Create a key-value pair"
+  },
+  "Empty Array": {
+    "prefix": "toon-array-empty",
+    "body": [
+      "${1:items}[0]:"
+    ],
+    "description": "Create an empty array"
+  },
+  "Tab-Delimited Array": {
+    "prefix": "toon-array-tab",
+    "body": [
+      "${1:items}[${2:2}\t]{${3:id}\t${4:name}}:",
+      "  ${5:1}\t${6:Alice}",
+      "  ${7:2}\t${8:Bob}"
+    ],
+    "description": "Create a tab-delimited tabular array"
+  },
+  "Array with Length Marker": {
+    "prefix": "toon-array-marker",
+    "body": [
+      "${1:items}[#${2:2}]{${3:id},${4:name}}:",
+      "  ${5:1},${6:Alice}",
+      "  ${7:2},${8:Bob}"
+    ],
+    "description": "Create a tabular array with length marker"
+  }
+}

@@ -1,0 +1,48 @@
+# Sample TOON file demonstrating various features
+
+# Simple key-value pairs
+name: TOON Format
+version: 1.4
+active: true
+
+# Nested object
+config:
+  indent: 2
+  strict: true
+  features:
+    validation: true
+    formatting: true
+
+# Inline primitive array
+tags[3]: json,llm,serialization
+
+# Tabular array (uniform objects)
+users[3]{id,name,email,role}:
+  1,Alice,alice@example.com,admin
+  2,Bob,bob@example.com,user
+  3,Charlie,charlie@example.com,user
+
+# List array (mixed types)
+items[4]:
+  - Simple string
+  - id: 1
+    name: Object item
+  - [3]: 1,2,3
+  - nested:
+      key: value
+
+# Tab-delimited array
+metrics[2	]{date	views	clicks}:
+  2025-01-01	5715	211
+  2025-01-02	7103	393
+
+# Array with length marker
+products[#2]{sku,name,price}:
+  A1,Widget,9.99
+  B2,Gadget,14.50
+
+# Empty array
+emptyList[0]:
+
+# Empty object
+emptyConfig:

@@ -1,0 +1,134 @@
+{
+  "name": "vscode-toon",
+  "displayName": "TOON Language Support",
+  "description": "Syntax highlighting, validation, and formatting for TOON (Token-Oriented Object Notation) files",
+  "version": "0.1.0",
+  "publisher": "VishalRaut2106",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Formatters",
+    "Linters"
+  ],
+  "keywords": [
+    "toon",
+    "json",
+    "llm",
+    "serialization",
+    "data-format"
+  ],
+  "icon": "images/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/VishalRaut2106/vscode-toon.git"
+  },
+  "bugs": {
+    "url": "https://github.com/VishalRaut2106/vscode-toon/issues"
+  },
+  "license": "MIT",
+  "main": "./out/extension.js",
+  "activationEvents": [],
+  "contributes": {
+    "commands": [
+      {
+        "command": "toon.validate",
+        "title": "TOON: Validate"
+      },
+      {
+        "command": "toon.convertToJson",
+        "title": "TOON: Convert to JSON"
+      },
+      {
+        "command": "toon.convertFromJson",
+        "title": "TOON: Convert from JSON (Choose Format)"
+      },
+      {
+        "command": "toon.convertFromJsonFlat",
+        "title": "TOON: Convert from JSON (Flattened - Save Tokens)"
+      }
+    ],
+    "languages": [
+      {
+        "id": "toon",
+        "aliases": [
+          "TOON",
+          "toon"
+        ],
+        "extensions": [
+          ".toon"
+        ],
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "light": "./images/file-icon.svg",
+          "dark": "./images/file-icon.svg"
+        }
+      }
+    ],
+    "grammars": [
+      {
+        "language": "toon",
+        "scopeName": "source.toon",
+        "path": "./syntaxes/toon.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "toon",
+        "path": "./snippets/toon.json"
+      }
+    ],
+    "configuration": {
+      "title": "TOON",
+      "properties": {
+        "toon.validation.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable/disable TOON validation"
+        },
+        "toon.format.indent": {
+          "type": "number",
+          "default": 2,
+          "description": "Number of spaces for indentation"
+        },
+        "toon.format.delimiter": {
+          "type": "string",
+          "enum": [
+            ",",
+            "\t",
+            "|"
+          ],
+          "default": ",",
+          "description": "Delimiter for array values"
+        },
+        "toon.format.lengthMarker": {
+          "type": "boolean",
+          "default": false,
+          "description": "Add # prefix to array lengths (e.g., [#3])"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile",
+    "lint": "eslint src --ext ts",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.80.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "typescript": "^5.0.0",
+    "@vscode/vsce": "^2.22.0"
+  },
+  "dependencies": {
+    "@toon-format/toon": "^0.8.0"
+  }
+}

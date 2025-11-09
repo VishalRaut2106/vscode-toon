@@ -1,0 +1,13 @@
+name: Test User
+version: 1.0
+active: true
+
+tags[3]: javascript,typescript,vscode
+
+users[2]{id,name,role}:
+  1,Alice,admin
+  2,Bob,user
+
+config:
+  indent: 2
+  strict: true

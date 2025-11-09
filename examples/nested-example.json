@@ -1,0 +1,19 @@
+{
+  "user": {
+    "name": "Alice",
+    "age": 30,
+    "address": {
+      "street": "123 Main St",
+      "city": "Boston",
+      "zip": "02101"
+    }
+  },
+  "settings": {
+    "theme": "dark",
+    "notifications": {
+      "email": true,
+      "push": false
+    }
+  },
+  "tags": ["admin", "developer"]
+}
