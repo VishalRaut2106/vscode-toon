@@ -47,7 +47,7 @@ Files with `.toon` extension are automatically recognized.
 ### Commands
 - `TOON: Validate` - Manually validate current TOON file
 - `TOON: Convert to JSON` - Convert TOON file to JSON
-- `TOON: Convert from JSON` - Convert JSON file to TOON
+- `TOON: Convert from JSON` - Convert JSON file to TOON (uses official TOON encoder)
 
 Access commands via Command Palette (`Ctrl+Shift+P` / `Cmd+Shift+P`)
 

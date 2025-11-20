@@ -2,7 +2,7 @@
   "name": "vscode-toon",
   "displayName": "TOON - Token-Efficient Data Format",
   "description": "Full language support for TOON (Token-Oriented Object Notation) - a compact, LLM-friendly data format. Features syntax highlighting, validation, JSON conversion, and smart formatting to reduce token usage by 30-60%.",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "publisher": "vishalraut",
   "engines": {
     "vscode": "^1.80.0"
@@ -43,11 +43,7 @@
       },
       {
         "command": "toon.convertFromJson",
-        "title": "TOON: Convert from JSON (Choose Format)"
-      },
-      {
-        "command": "toon.convertFromJsonFlat",
-        "title": "TOON: Convert from JSON (Flattened - Save Tokens)"
+        "title": "TOON: Convert from JSON"
       }
     ],
     "languages": [

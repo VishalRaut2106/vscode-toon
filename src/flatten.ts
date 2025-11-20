@@ -36,9 +36,34 @@ export function flattenObject(
       return
     }
 
-    // Handle arrays - keep as is (don't flatten)
+    // Handle arrays
     if (Array.isArray(current)) {
-      result[prefix || 'array'] = current
+      // If array contains objects, flatten each object
+      if (current.length > 0 && current.every(item => typeof item === 'object' && item !== null && !Array.isArray(item))) {
+        // Array of objects - flatten each object
+        const flattenedArray = current.map(item => {
+          const flattened: Record<string, any> = {}
+          function flattenItem(obj: any, itemPrefix: string = ''): void {
+            for (const key of Object.keys(obj)) {
+              const escapedKey = key.replace(/\./g, '\\.')
+              const newPrefix = itemPrefix ? `${itemPrefix}${separator}${escapedKey}` : escapedKey
+              const value = obj[key]
+              
+              if (value !== null && typeof value === 'object' && !Array.isArray(value)) {
+                flattenItem(value, newPrefix)
+              } else {
+                flattened[newPrefix] = value
+              }
+            }
+          }
+          flattenItem(item)
+          return flattened
+        })
+        result[prefix || 'array'] = flattenedArray
+      } else {
+        // Keep primitive arrays or mixed arrays as-is
+        result[prefix || 'array'] = current
+      }
       return
     }
 
@@ -112,14 +137,30 @@ export function unflattenObject(
 
 /**
  * Check if an object has nested objects (excluding arrays)
+ * Recursively checks arrays and nested structures
  */
 export function hasNestedObjects(obj: any): boolean {
-  if (typeof obj !== 'object' || obj === null || Array.isArray(obj)) {
+  if (typeof obj !== 'object' || obj === null) {
     return false
   }
 
+  // If it's an array, check each element
+  if (Array.isArray(obj)) {
+    for (const item of obj) {
+      if (hasNestedObjects(item)) {
+        return true
+      }
+    }
+    return false
+  }
+
+  // For objects, check if any value is a non-array object
   for (const value of Object.values(obj)) {
     if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+      return true
+    }
+    // Also recursively check nested structures
+    if (hasNestedObjects(value)) {
       return true
     }
   }
