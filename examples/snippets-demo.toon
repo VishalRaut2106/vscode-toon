@@ -1,0 +1,106 @@
+# TOON Snippets Demo - Common Patterns
+# This file demonstrates all 9 built-in snippets
+
+# ============================================
+# 1. INLINE ARRAY - toon-array-inline
+# ============================================
+# Use for: Simple lists of primitives
+friends[3]: alice,bob,charlie
+colors[4]: red,green,blue,yellow
+active[2]: true,false
+
+# ============================================
+# 2. TABULAR ARRAY - toon-array-tabular
+# ============================================
+# Use for: Uniform arrays of objects (MOST COMMON)
+employees[3]{id,name,department,salary}:
+  1,Alice Johnson,Engineering,95000
+  2,Bob Smith,Sales,75000
+  3,Carol White,Marketing,80000
+
+# ============================================
+# 3. LIST ARRAY - toon-array-list
+# ============================================
+# Use for: Non-uniform or complex items
+tasks[2]:
+  - Complete project documentation
+  - Review pull requests
+
+# ============================================
+# 4. OBJECT - toon-object
+# ============================================
+# Use for: Nested key-value structures
+config:
+  database:
+    host: localhost
+    port: 5432
+  cache:
+    enabled: true
+    ttl: 3600
+
+# ============================================
+# 5. LIST ITEM OBJECT - toon-list-object
+# ============================================
+# Use for: Mixed list and object structures
+notifications[2]:
+  - type: email
+    recipient: user@example.com
+    subject: Welcome
+  - type: sms
+    recipient: +1234567890
+    message: Verification code
+
+# ============================================
+# 6. KEY-VALUE - toon-kv
+# ============================================
+# Use for: Simple properties
+version: 1.0.0
+author: John Doe
+license: MIT
+
+# ============================================
+# 7. EMPTY ARRAY - toon-array-empty
+# ============================================
+# Use for: Empty collections
+archived_items[0]:
+pending_reviews[0]:
+
+# ============================================
+# 8. TAB-DELIMITED ARRAY - toon-array-tab
+# ============================================
+# Use for: Tab-separated data (alternative delimiter)
+products[2]{sku	name	price}:
+	SKU001	Laptop	999.99
+	SKU002	Mouse	29.99
+
+# ============================================
+# 9. ARRAY WITH LENGTH MARKER - toon-array-marker
+# ============================================
+# Use for: Explicit length validation
+orders[#2]{order_id,customer,total}:
+  ORD-001,Alice,150.00
+  ORD-002,Bob,275.50
+
+# ============================================
+# REAL-WORLD EXAMPLE: Complete Data Structure
+# ============================================
+metadata:
+  version: 2.0
+  created: 2025-11-21
+  author: Demo User
+
+context:
+  task: Q4 Sales Analysis
+  region: North America
+  period: October-December
+
+team[3]{id,name,role,email}:
+  1,Alice Chen,Manager,alice@company.com
+  2,Bob Martinez,Analyst,bob@company.com
+  3,Carol Davis,Developer,carol@company.com
+
+regions[2]{code,name,revenue}:
+  NA,North America,450000
+  EU,Europe,320000
+
+status[3]: active,pending,completed
