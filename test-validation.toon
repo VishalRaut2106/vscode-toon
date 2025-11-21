@@ -1,0 +1,21 @@
+# Test file for validation errors
+# These should show errors in the Problems panel
+
+# ERROR: Array declares 3 items but has 2
+users[3]{id,name}:
+  1,Alice
+  2,Bob
+
+# ERROR: Mismatched field count (3 fields declared, 2 values)
+data[1]{a,b,c}:
+  1,2
+
+# VALID: Correct array length and fields
+valid[2]{x,y}:
+  1,2
+  3,4
+
+# ERROR: Invalid JSON after conversion
+broken[1]:
+  - key: value
+    another

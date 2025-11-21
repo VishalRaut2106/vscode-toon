@@ -22,7 +22,6 @@ export class ToonFormatter implements vscode.DocumentFormattingEditProvider {
       const formatted = encode(data, {
         indent: config.get('indent', options.tabSize),
         delimiter: config.get('delimiter', ','),
-        lengthMarker: config.get('lengthMarker', false) ? '#' : false,
       })
 
       // Replace entire document

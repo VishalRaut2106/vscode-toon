@@ -1,0 +1,34 @@
+tags[3]: javascript,typescript,react
+
+users[3]{id,name,email,role}:
+  1,Alice,alice@example.com,admin
+  2,Bob,bob@example.com,user
+  3,Charlie,charlie@example.com,guest
+
+products[2]:
+  - id: 1
+    name: Laptop
+    price: 999.99
+    inStock: true
+  - id: 2
+    name: Mouse
+    price: 29.99
+    inStock: false
+
+config:
+  database:
+    host: localhost
+    port: 5432
+    username: admin
+    password: null
+  cache:
+    enabled: true
+    ttl: 3600
+
+mixed:
+  string: "Hello World"
+  number: 42
+  float: 3.14
+  boolean: true
+  null: null
+  array[3]: a,b,c

@@ -1,6 +1,8 @@
 import * as vscode from 'vscode'
 import { ToonValidator } from './validator'
 import { ToonFormatter } from './formatter'
+import { ToonCompletionProvider } from './completion'
+import { ToonHoverProvider } from './hover'
 import { encode, decode } from '@toon-format/toon'
 
 export function activate(context: vscode.ExtensionContext) {
@@ -8,10 +10,22 @@ export function activate(context: vscode.ExtensionContext) {
 
   const validator = new ToonValidator()
   const formatter = new ToonFormatter()
+  const completionProvider = new ToonCompletionProvider()
+  const hoverProvider = new ToonHoverProvider()
 
   // Register document formatting provider
   context.subscriptions.push(
     vscode.languages.registerDocumentFormattingEditProvider('toon', formatter)
+  )
+
+  // Register completion provider
+  context.subscriptions.push(
+    vscode.languages.registerCompletionItemProvider('toon', completionProvider, '[', '{', ',', '\t', '|', '-')
+  )
+
+  // Register hover provider
+  context.subscriptions.push(
+    vscode.languages.registerHoverProvider('toon', hoverProvider)
   )
 
   // Register validation on document change
@@ -116,7 +130,6 @@ export function activate(context: vscode.ExtensionContext) {
         const toonString = encode(jsonData, {
           indent: config.get('indent', 2),
           delimiter: config.get('delimiter', ','),
-          lengthMarker: config.get('lengthMarker', false) ? '#' : false,
         })
 
         const doc = await vscode.workspace.openTextDocument({

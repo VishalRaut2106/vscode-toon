@@ -2,7 +2,7 @@
   "name": "vscode-toon",
   "displayName": "TOON - Token-Efficient Data Format",
   "description": "Full language support for TOON (Token-Oriented Object Notation) - a compact, LLM-friendly data format. Features syntax highlighting, validation, JSON conversion, and smart formatting to reduce token usage by 30-60%.",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "publisher": "vishalraut",
   "engines": {
     "vscode": "^1.80.0"
@@ -94,11 +94,6 @@
           ],
           "default": ",",
           "description": "Delimiter for array values"
-        },
-        "toon.format.lengthMarker": {
-          "type": "boolean",
-          "default": false,
-          "description": "Add # prefix to array lengths (e.g., [#3])"
         }
       }
     }
@@ -122,6 +117,6 @@
     "@vscode/vsce": "^2.22.0"
   },
   "dependencies": {
-    "@toon-format/toon": "^0.8.0"
+    "@toon-format/toon": "^1.0.0"
   }
 }

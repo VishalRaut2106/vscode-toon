@@ -2,6 +2,60 @@
 
 All notable changes to the "vscode-toon" extension will be documented in this file.
 
+## [0.2.0] - 2025-11-21
+
+### 🎉 Major Release - All Features Complete (8/8)
+
+### Added
+- **IntelliSense/Code Completion** (`src/completion.ts`)
+  - Smart autocomplete for TOON syntax as you type
+  - Array headers with length declarations
+  - Tabular arrays with field headers
+  - Inline arrays for primitives
+  - List items and key-value pairs
+  - Delimiter suggestions (comma, tab, pipe)
+  - Snippet-based with placeholders
+  
+- **Hover Documentation** (`src/hover.ts`)
+  - Contextual help when hovering over TOON constructs
+  - Array length explanations
+  - Field header information with field lists
+  - Delimiter descriptions and token efficiency tips
+  - List item documentation
+  - Inline examples
+
+### Changed
+- **Spec Compatibility**: Updated to `@toon-format/toon` v1.0.0
+- Removed deprecated `lengthMarker` option (not in TOON v1.0.0 API)
+- All features now use official TOON encoder/decoder
+
+### Improved
+- **Documentation**: Complete rewrite with comprehensive user guide
+  - Feature overview with examples
+  - Usage guide for all features
+  - Keyboard shortcuts reference
+  - Troubleshooting section
+  - Tips & best practices
+  - Configuration guide
+- **Testing**: Added comprehensive test files
+  - `test-syntax.toon` - Syntax highlighting test
+  - `test-validation.toon` - Validation error test
+  - `test-conversion.json` - Conversion test
+  - `test-formatting.toon` - Formatting test
+  - `TEST-RESULTS.md` - Complete test results
+  - `FEATURES.md` - Feature documentation
+
+### Summary
+All 8 core features are now implemented and tested:
+1. ✅ Syntax Highlighting
+2. ✅ IntelliSense & Code Completion
+3. ✅ Hover Documentation
+4. ✅ Real-time Validation
+5. ✅ Smart Formatting
+6. ✅ Code Snippets
+7. ✅ Conversion Commands
+8. ✅ Configuration
+
 ## [0.1.4] - 2025-11-20
 
 ### Changed
