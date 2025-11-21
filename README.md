@@ -4,6 +4,19 @@ Complete language support for TOON (Token-Oriented Object Notation) - a compact,
 
 Perfect for developers working with Large Language Models who want to minimize API costs while maintaining data clarity.
 
+## 📖 Table of Contents
+
+- [Features](#-features)
+- [Installation](#installation)
+- [Getting Started](#-getting-started)
+- **[Snippets Documentation](#-snippets-documentation)** ⭐ NEW
+- [Usage Guide](#-usage-guide)
+- [Configuration](#-configuration)
+- [Examples](#-examples)
+- [Tips & Best Practices](#-tips--best-practices)
+- [Troubleshooting](#-troubleshooting)
+- [Contributing](#-contributing)
+
 ## ✨ Features
 
 ### 🎨 Syntax Highlighting
@@ -47,6 +60,8 @@ Perfect for developers working with Large Language Models who want to minimize A
 - `toon-object` - Nested object
 - `toon-kv` - Key-value pair
 
+**📖 [Complete Snippets Documentation](SNIPPETS-INDEX.md)** - Learn all 9 snippets with examples and guides
+
 ### 🔄 Conversion Commands
 - **Convert TOON to JSON** - Decode TOON files to JSON
 - **Convert JSON to TOON** - Encode JSON using official TOON encoder
@@ -72,6 +87,36 @@ Files with `.toon` extension are automatically recognized and syntax highlighted
 3. **Use snippets** - Type `toon-` and press `Tab` to see available templates
 4. **Hover for help** - Hover over any TOON construct for documentation
 5. **Format your code** - Right-click → Format Document (or `Shift+Alt+F`)
+
+## 📚 Snippets Documentation
+
+Complete guides for using TOON code snippets:
+
+| Guide | Time | Description |
+|-------|------|-------------|
+| **[⭐ Quick Start](SNIPPETS-QUICK-START.md)** | 5 min | Get started with your first snippet in 5 minutes |
+| **[📖 Testing Guide](SNIPPETS-TESTING-GUIDE.md)** | 20 min | Detailed guide for all 9 snippets with examples |
+| **[🎨 Visual Guide](SNIPPETS-VISUAL-GUIDE.md)** | 15 min | Visual diagrams, workflows, and pattern combinations |
+| **[✅ Testing Checklist](SNIPPETS-CHECKLIST.md)** | 45 min | Step-by-step testing procedures and verification |
+| **[📚 Summary](SNIPPETS-SUMMARY.md)** | 10 min | Quick reference and overview of all snippets |
+| **[🗂️ Index](SNIPPETS-INDEX.md)** | - | Master index with navigation and FAQ |
+| **[💻 Working Example](examples/snippets-demo.toon)** | - | Complete working code example |
+
+### Quick Snippet Reference
+
+| Snippet | Prefix | Use For |
+|---------|--------|---------|
+| Inline Array | `toon-array-inline` | Simple lists of primitives |
+| **Tabular Array** | `toon-array-tabular` | **Uniform objects (80% of code)** ⭐ |
+| List Array | `toon-array-list` | Non-uniform or complex items |
+| Object | `toon-object` | Nested key-value structures |
+| List Item Object | `toon-list-object` | Mixed list and object structures |
+| Key-Value | `toon-kv` | Simple key-value pairs |
+| Empty Array | `toon-array-empty` | Empty collections or placeholders |
+| Tab-Delimited | `toon-array-tab` | Tab-separated data (TSV) |
+| Array Marker | `toon-array-marker` | Strict validation with `[#N]` |
+
+**👉 [Start with Quick Start Guide →](SNIPPETS-QUICK-START.md)**
 
 ## 📚 Usage Guide
 
@@ -288,6 +333,43 @@ TOON (Token-Oriented Object Notation) is designed for developers working with LL
 | Command Palette | `Ctrl+Shift+P` | `Cmd+Shift+P` |
 | Trigger IntelliSense | `Ctrl+Space` | `Cmd+Space` |
 | Show Hover | Hover with mouse | Hover with mouse |
+| Insert Snippet | `Tab` | `Tab` |
+| Next Placeholder | `Tab` | `Tab` |
+| Previous Placeholder | `Shift+Tab` | `Shift+Tab` |
+
+## 📚 Snippets Resources
+
+Complete documentation for TOON code snippets:
+
+### Getting Started
+- **[⭐ Quick Start (5 min)](SNIPPETS-QUICK-START.md)** - Perfect for beginners, get your first snippet working in 5 minutes
+- **[💻 Working Example](examples/snippets-demo.toon)** - See all 9 snippets in action
+
+### Learning
+- **[📖 Testing Guide (20 min)](SNIPPETS-TESTING-GUIDE.md)** - Detailed guide for each of the 9 snippets with real-world examples
+- **[🎨 Visual Guide (15 min)](SNIPPETS-VISUAL-GUIDE.md)** - Visual diagrams, workflows, and pattern combinations
+
+### Testing & Reference
+- **[✅ Testing Checklist (45 min)](SNIPPETS-CHECKLIST.md)** - Step-by-step procedures to test all snippets
+- **[📚 Summary](SNIPPETS-SUMMARY.md)** - Quick reference for all snippets and common issues
+- **[🗂️ Index](SNIPPETS-INDEX.md)** - Master index with navigation and FAQ
+- **[📋 Documentation Package](SNIPPETS-DOCUMENTATION-COMPLETE.md)** - Overview of all documentation
+
+### The 9 Snippets
+
+| # | Snippet | Prefix | Example |
+|---|---------|--------|---------|
+| 1 | Inline Array | `toon-array-inline` | `colors[3]: red,green,blue` |
+| 2 | **Tabular Array** ⭐ | `toon-array-tabular` | `users[2]{id,name}: 1,Alice` |
+| 3 | List Array | `toon-array-list` | `items[2]: - item1 - item2` |
+| 4 | Object | `toon-object` | `config: setting: value` |
+| 5 | List Item Object | `toon-list-object` | `- key: value field: data` |
+| 6 | Key-Value | `toon-kv` | `version: 1.0.0` |
+| 7 | Empty Array | `toon-array-empty` | `archived[0]:` |
+| 8 | Tab-Delimited | `toon-array-tab` | Tab-separated data |
+| 9 | Array Marker | `toon-array-marker` | `items[#2]{id,name}:` |
+
+**👉 [Start Learning Snippets →](SNIPPETS-QUICK-START.md)**
 
 ## 🐛 Troubleshooting
 
