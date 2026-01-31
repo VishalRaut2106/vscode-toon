@@ -21,6 +21,10 @@ on:
 jobs:
   version-bump:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: read
+      pull-requests: write
     
     steps:
     - name: Checkout code
