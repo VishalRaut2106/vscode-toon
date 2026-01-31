@@ -2,7 +2,7 @@
   "name": "vscode-toon",
   "displayName": "TOON - Token-Efficient Data Format (OFFICIAL)",
   "description": "🔐 OFFICIAL TOON Extension by Vishal Raut (TOON Organization Member) - Full language support for TOON (Token-Oriented Object Notation). Features syntax highlighting, validation, JSON conversion, and smart formatting to reduce token usage by 30-60%. ⚠️ Beware of fake extensions!",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "publisher": "vishalraut",
   "engines": {
     "vscode": "^1.80.0",
