@@ -1,0 +1,124 @@
+name: Version Bump and Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_type:
+        description: 'Version bump type'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+        - patch
+        - minor
+        - major
+      pre_release:
+        description: 'Create pre-release'
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  version-bump:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+    
+    - name: Configure Git
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Bump version
+      id: version
+      run: |
+        OLD_VERSION=$(node -p "require('./package.json').version")
+        npm version ${{ github.event.inputs.version_type }} --no-git-tag-version
+        NEW_VERSION=$(node -p "require('./package.json').version")
+        echo "old_version=$OLD_VERSION" >> $GITHUB_OUTPUT
+        echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+        echo "tag_name=v$NEW_VERSION" >> $GITHUB_OUTPUT
+    
+    - name: Update CHANGELOG
+      run: |
+        NEW_VERSION="${{ steps.version.outputs.new_version }}"
+        DATE=$(date +%Y-%m-%d)
+        
+        # Create new changelog entry
+        cat > temp_changelog.md << EOF
+        # Change Log
+        
+        All notable changes to the "vscode-toon" extension will be documented in this file.
+        
+        ## [$NEW_VERSION] - $DATE
+        
+        ### Added
+        - Version bump to $NEW_VERSION
+        
+        EOF
+        
+        # Append existing changelog (skip first 3 lines)
+        tail -n +4 CHANGELOG.md >> temp_changelog.md
+        mv temp_changelog.md CHANGELOG.md
+    
+    - name: Commit changes
+      run: |
+        git add package.json package-lock.json CHANGELOG.md
+        git commit -m "chore: bump version to ${{ steps.version.outputs.new_version }}"
+        git push origin main
+    
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.version.outputs.tag_name }}
+        release_name: "TOON Extension v${{ steps.version.outputs.new_version }}"
+        body: |
+          ## 🚀 TOON VS Code Extension v${{ steps.version.outputs.new_version }}
+          
+          ### 📦 What's New
+          - Version bump from ${{ steps.version.outputs.old_version }} to ${{ steps.version.outputs.new_version }}
+          
+          ### 📥 Installation
+          ```bash
+          code --install-extension vishalraut.vscode-toon
+          ```
+          
+          ### 🔐 Verification
+          **Publisher**: `vishalraut` (Vishal Raut)  
+          **Extension ID**: `vishalraut.vscode-toon`  
+          **Official Repository**: https://github.com/vishalraut2106/vscode-toon  
+          
+          ### 🏢 Official TOON Organization
+          This extension is officially maintained by Vishal Raut, a verified member of the [TOON Organization](https://github.com/toon-format).
+          
+          ### ⚠️ Security Notice
+          This is the **OFFICIAL** TOON extension. Beware of fake extensions with similar names!
+          
+          ---
+          
+          **Full Changelog**: https://github.com/vishalraut2106/vscode-toon/blob/main/CHANGELOG.md
+        draft: false
+        prerelease: ${{ github.event.inputs.pre_release }}
+    
+    - name: Output release info
+      run: |
+        echo "🎉 Created release: ${{ steps.version.outputs.tag_name }}"
+        echo "📝 Release URL: ${{ steps.create_release.outputs.html_url }}"
+        echo "🚀 This will trigger the CI/CD pipeline to publish to marketplace!"
