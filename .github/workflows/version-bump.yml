@@ -87,26 +87,22 @@ jobs:
     
     - name: Create Release
       id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ steps.version.outputs.tag_name }}
-        release_name: "TOON Extension v${{ steps.version.outputs.new_version }}"
-        body: |
-          ## 🚀 TOON VS Code Extension v${{ steps.version.outputs.new_version }}
+      run: |
+        gh release create ${{ steps.version.outputs.tag_name }} \
+          --title "TOON Extension v${{ steps.version.outputs.new_version }}" \
+          --notes "## 🚀 TOON VS Code Extension v${{ steps.version.outputs.new_version }}
           
           ### 📦 What's New
           - Version bump from ${{ steps.version.outputs.old_version }} to ${{ steps.version.outputs.new_version }}
           
           ### 📥 Installation
-          ```bash
+          \`\`\`bash
           code --install-extension vishalraut.vscode-toon
-          ```
+          \`\`\`
           
           ### 🔐 Verification
-          **Publisher**: `vishalraut` (Vishal Raut)  
-          **Extension ID**: `vishalraut.vscode-toon`  
+          **Publisher**: \`vishalraut\` (Vishal Raut)  
+          **Extension ID**: \`vishalraut.vscode-toon\`  
           **Official Repository**: https://github.com/vishalraut2106/vscode-toon  
           
           ### 🏢 Official TOON Organization
@@ -117,12 +113,13 @@ jobs:
           
           ---
           
-          **Full Changelog**: https://github.com/vishalraut2106/vscode-toon/blob/main/CHANGELOG.md
-        draft: false
-        prerelease: ${{ github.event.inputs.pre_release }}
+          **Full Changelog**: https://github.com/vishalraut2106/vscode-toon/blob/main/CHANGELOG.md" \
+          ${{ github.event.inputs.pre_release == 'true' && '--prerelease' || '' }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
     - name: Output release info
       run: |
         echo "🎉 Created release: ${{ steps.version.outputs.tag_name }}"
-        echo "📝 Release URL: ${{ steps.create_release.outputs.html_url }}"
+        echo "📝 Release URL: https://github.com/vishalraut2106/vscode-toon/releases/tag/${{ steps.version.outputs.tag_name }}"
         echo "🚀 This will trigger the CI/CD pipeline to publish to marketplace!"

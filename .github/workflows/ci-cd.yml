@@ -163,14 +163,11 @@ jobs:
         path: "*.vsix"
     
     - name: Attach VSIX to GitHub Release
-      uses: actions/upload-release-asset@v1
+      run: |
+        VSIX_FILE=$(ls *.vsix | head -1)
+        gh release upload ${{ github.event.release.tag_name }} "$VSIX_FILE"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ github.event.release.upload_url }}
-        asset_path: ./vscode-toon-${{ github.event.release.tag_name }}.vsix
-        asset_name: vscode-toon-${{ github.event.release.tag_name }}.vsix
-        asset_content_type: application/zip
 
   # Notification Job
   notify:
