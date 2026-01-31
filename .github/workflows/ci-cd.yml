@@ -130,7 +130,8 @@ jobs:
     - name: Install VSCE
       run: npm install -g @vscode/vsce
     
-    - name: Verify version matches release tag
+    - name: Verify version (for release events only)
+      if: github.event_name == 'release'
       run: |
         PACKAGE_VERSION=$(node -p "require('./package.json').version")
         RELEASE_TAG=${GITHUB_REF#refs/tags/v}
@@ -140,6 +141,12 @@ jobs:
           echo "Version mismatch! Package version ($PACKAGE_VERSION) doesn't match release tag ($RELEASE_TAG)"
           exit 1
         fi
+    
+    - name: Get current version (for manual triggers)
+      if: github.event_name == 'workflow_dispatch'
+      run: |
+        PACKAGE_VERSION=$(node -p "require('./package.json').version")
+        echo "Publishing current package version: $PACKAGE_VERSION"
     
     - name: Package extension
       run: vsce package
