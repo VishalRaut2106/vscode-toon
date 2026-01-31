@@ -2,6 +2,12 @@
 
 All notable changes to the "vscode-toon" extension will be documented in this file.
 
+## [0.2.2] - 2026-01-31
+
+### Added
+- Version bump to 0.2.2
+
+
 ## [0.2.1] - 2025-02-01
 
 ### 🔐 Security & Authenticity Update
