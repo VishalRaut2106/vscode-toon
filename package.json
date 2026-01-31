@@ -5,7 +5,8 @@
   "version": "0.2.1",
   "publisher": "vishalraut",
   "engines": {
-    "vscode": "^1.80.0"
+    "vscode": "^1.80.0",
+    "node": ">=20.0.0"
   },
   "categories": [
     "Programming Languages",
@@ -143,7 +144,7 @@
     "@typescript-eslint/parser": "^6.0.0",
     "eslint": "^8.0.0",
     "typescript": "^5.0.0",
-    "@vscode/vsce": "^2.22.0"
+    "@vscode/vsce": "^3.0.0"
   },
   "dependencies": {
     "@toon-format/toon": "^1.0.0"
