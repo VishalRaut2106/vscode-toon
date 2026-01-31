@@ -1,155 +1,155 @@
-import * as vscode from 'vscode'
-import { ToonValidator } from './validator'
-import { ToonFormatter } from './formatter'
-import { ToonCompletionProvider } from './completion'
-import { ToonHoverProvider } from './hover'
-import { encode, decode } from '@toon-format/toon'
+import * as vscode from 'vscode';
+import { ToonValidator } from './validator';
+import { ToonFormatter } from './formatter';
+import { ToonCompletionProvider } from './completion';
+import { ToonHoverProvider } from './hover';
+import { encode, decode } from '@toon-format/toon';
 
 export function activate(context: vscode.ExtensionContext) {
-  console.log('TOON extension is now active')
+  console.log('TOON extension is now active');
 
-  const validator = new ToonValidator()
-  const formatter = new ToonFormatter()
-  const completionProvider = new ToonCompletionProvider()
-  const hoverProvider = new ToonHoverProvider()
+  const validator = new ToonValidator();
+  const formatter = new ToonFormatter();
+  const completionProvider = new ToonCompletionProvider();
+  const hoverProvider = new ToonHoverProvider();
 
   // Register document formatting provider
   context.subscriptions.push(
     vscode.languages.registerDocumentFormattingEditProvider('toon', formatter)
-  )
+  );
 
   // Register completion provider
   context.subscriptions.push(
     vscode.languages.registerCompletionItemProvider('toon', completionProvider, '[', '{', ',', '\t', '|', '-')
-  )
+  );
 
   // Register hover provider
   context.subscriptions.push(
     vscode.languages.registerHoverProvider('toon', hoverProvider)
-  )
+  );
 
   // Register validation on document change
   context.subscriptions.push(
     vscode.workspace.onDidChangeTextDocument((event) => {
       if (event.document.languageId === 'toon') {
-        validator.validate(event.document)
+        validator.validate(event.document);
       }
     })
-  )
+  );
 
   // Register validation on document open
   context.subscriptions.push(
     vscode.workspace.onDidOpenTextDocument((document) => {
       if (document.languageId === 'toon') {
-        validator.validate(document)
+        validator.validate(document);
       }
     })
-  )
+  );
 
   // Validate all open TOON documents
   vscode.workspace.textDocuments.forEach((document) => {
     if (document.languageId === 'toon') {
-      validator.validate(document)
+      validator.validate(document);
     }
-  })
+  });
 
   // Register commands
   context.subscriptions.push(
     vscode.commands.registerCommand('toon.validate', () => {
-      const editor = vscode.window.activeTextEditor
+      const editor = vscode.window.activeTextEditor;
       if (editor && editor.document.languageId === 'toon') {
-        validator.validate(editor.document)
-        vscode.window.showInformationMessage('TOON validation complete')
+        validator.validate(editor.document);
+        vscode.window.showInformationMessage('TOON validation complete');
       }
     })
-  )
+  );
 
   context.subscriptions.push(
     vscode.commands.registerCommand('toon.convertToJson', async () => {
-      const editor = vscode.window.activeTextEditor
+      const editor = vscode.window.activeTextEditor;
       if (!editor) {
-        vscode.window.showWarningMessage('No active editor found')
-        return
+        vscode.window.showWarningMessage('No active editor found');
+        return;
       }
 
       if (editor.document.languageId !== 'toon') {
-        vscode.window.showWarningMessage('Current file is not a TOON file')
-        return
+        vscode.window.showWarningMessage('Current file is not a TOON file');
+        return;
       }
 
       try {
-        const toonContent = editor.document.getText().trim()
+        const toonContent = editor.document.getText().trim();
 
         if (!toonContent) {
-          vscode.window.showWarningMessage('Document is empty')
-          return
+          vscode.window.showWarningMessage('Document is empty');
+          return;
         }
 
-        const jsonData = decode(toonContent)
-        const jsonString = JSON.stringify(jsonData, null, 2)
+        const jsonData = decode(toonContent);
+        const jsonString = JSON.stringify(jsonData, null, 2);
 
         const doc = await vscode.workspace.openTextDocument({
           content: jsonString,
           language: 'json',
-        })
-        await vscode.window.showTextDocument(doc, { preview: false })
-        vscode.window.showInformationMessage('Successfully converted TOON to JSON')
+        });
+        await vscode.window.showTextDocument(doc, { preview: false });
+        vscode.window.showInformationMessage('Successfully converted TOON to JSON');
       }
       catch (error) {
         vscode.window.showErrorMessage(
           `Failed to convert TOON to JSON: ${error instanceof Error ? error.message : String(error)}`
-        )
+        );
       }
     })
-  )
+  );
 
   context.subscriptions.push(
     vscode.commands.registerCommand('toon.convertFromJson', async () => {
-      const editor = vscode.window.activeTextEditor
+      const editor = vscode.window.activeTextEditor;
       if (!editor) {
-        vscode.window.showWarningMessage('No active editor found')
-        return
+        vscode.window.showWarningMessage('No active editor found');
+        return;
       }
 
       if (editor.document.languageId !== 'json') {
-        vscode.window.showWarningMessage('Current file is not a JSON file')
-        return
+        vscode.window.showWarningMessage('Current file is not a JSON file');
+        return;
       }
 
       try {
-        const jsonContent = editor.document.getText().trim()
+        const jsonContent = editor.document.getText().trim();
 
         if (!jsonContent) {
-          vscode.window.showWarningMessage('Document is empty')
-          return
+          vscode.window.showWarningMessage('Document is empty');
+          return;
         }
 
-        const jsonData = JSON.parse(jsonContent)
+        const jsonData = JSON.parse(jsonContent);
 
-        const config = vscode.workspace.getConfiguration('toon.format')
+        const config = vscode.workspace.getConfiguration('toon.format');
         const toonString = encode(jsonData, {
           indent: config.get('indent', 2),
           delimiter: config.get('delimiter', ','),
-        })
+        });
 
         const doc = await vscode.workspace.openTextDocument({
           content: toonString,
           language: 'toon',
-        })
-        await vscode.window.showTextDocument(doc, { preview: false })
-        vscode.window.showInformationMessage('Successfully converted JSON to TOON')
+        });
+        await vscode.window.showTextDocument(doc, { preview: false });
+        vscode.window.showInformationMessage('Successfully converted JSON to TOON');
       }
       catch (error) {
         vscode.window.showErrorMessage(
           `Failed to convert JSON to TOON: ${error instanceof Error ? error.message : String(error)}`
-        )
+        );
       }
     })
-  )
+  );
 
 
 }
 
 export function deactivate() {
-  console.log('TOON extension is now deactivated')
+  console.log('TOON extension is now deactivated');
 }

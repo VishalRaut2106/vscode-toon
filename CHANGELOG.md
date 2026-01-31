@@ -2,6 +2,30 @@
 
 All notable changes to the "vscode-toon" extension will be documented in this file.
 
+## [0.2.1] - 2025-02-01
+
+### 🔐 Security & Authenticity Update
+- **CRITICAL**: Added official verification badges and documentation
+- **WARNING**: Multiple fake TOON extensions detected in VS Code marketplace
+- Added comprehensive authenticity verification guide (`OFFICIAL-VERIFICATION.md`)
+- Updated extension title to include "(OFFICIAL)" designation
+- Added official TOON organization member verification
+- Created verification script (`verify-official.js`) for users
+- Enhanced README with security warnings and verification steps
+
+### 🛡️ Anti-Fraud Measures
+- Clear publisher verification (`vishalraut`)
+- Official repository links to TOON organization
+- Verification badges in package.json
+- User education about fake extensions
+- Reporting mechanisms for fake extensions
+
+### 📚 Documentation Enhancements
+- Added official branding and security warnings
+- Enhanced installation instructions with security checks
+- Updated package.json with official keywords and badges
+- Added footer with official TOON organization links
+
 ## [0.2.0] - 2025-11-21
 
 ### 🎉 Major Release - All Features Complete (8/8)

@@ -1,8 +1,8 @@
 {
   "name": "vscode-toon",
-  "displayName": "TOON - Token-Efficient Data Format",
-  "description": "Full language support for TOON (Token-Oriented Object Notation) - a compact, LLM-friendly data format. Features syntax highlighting, validation, JSON conversion, and smart formatting to reduce token usage by 30-60%.",
-  "version": "0.2.0",
+  "displayName": "TOON - Token-Efficient Data Format (OFFICIAL)",
+  "description": "🔐 OFFICIAL TOON Extension by Vishal Raut (TOON Organization Member) - Full language support for TOON (Token-Oriented Object Notation). Features syntax highlighting, validation, JSON conversion, and smart formatting to reduce token usage by 30-60%. ⚠️ Beware of fake extensions!",
+  "version": "0.2.1",
   "publisher": "vishalraut",
   "engines": {
     "vscode": "^1.80.0"
@@ -17,9 +17,30 @@
     "json",
     "llm",
     "serialization",
-    "data-format"
+    "data-format",
+    "official",
+    "authentic",
+    "toon-organization",
+    "vishal-raut",
+    "token-efficient"
   ],
   "icon": "images/toon.png",
+  "galleryBanner": {
+    "color": "#1e1e1e",
+    "theme": "dark"
+  },
+  "badges": [
+    {
+      "url": "https://img.shields.io/badge/Official-TOON%20Extension-blue?style=flat-square",
+      "href": "https://github.com/toon-format",
+      "description": "Official TOON Extension"
+    },
+    {
+      "url": "https://img.shields.io/badge/Maintained%20by-Vishal%20Raut-green?style=flat-square",
+      "href": "https://github.com/vishalraut2106",
+      "description": "Maintained by Vishal Raut"
+    }
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/vishalraut2106/vscode-toon.git"
@@ -104,8 +125,16 @@
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile",
     "lint": "eslint src --ext ts",
+    "lint:fix": "eslint src --ext ts --fix",
     "package": "vsce package",
-    "publish": "vsce publish"
+    "publish": "vsce publish",
+    "publish:pre": "vsce publish --pre-release",
+    "validate-cicd": "node validate-cicd.js",
+    "verify-official": "node verify-official.js",
+    "security-audit": "npm audit --audit-level=moderate",
+    "outdated": "npm outdated",
+    "clean": "rimraf out *.vsix",
+    "test": "echo \"No tests specified\" && exit 0"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

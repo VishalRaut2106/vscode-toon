@@ -1,8 +1,38 @@
 # TOON - Token-Efficient Data Format for VS Code
 
+[![Official TOON Extension](https://img.shields.io/badge/Official-TOON%20Extension-blue?style=for-the-badge&logo=visual-studio-code)](https://github.com/toon-format)
+[![Maintained by Vishal Raut](https://img.shields.io/badge/Maintained%20by-Vishal%20Raut-green?style=for-the-badge)](https://github.com/vishalraut2106)
+[![TOON Organization](https://img.shields.io/badge/TOON-Organization%20Member-orange?style=for-the-badge)](https://github.com/toon-format)
+[![Authentic Extension](https://img.shields.io/badge/⚠️-Beware%20of%20Fake%20Extensions-red?style=for-the-badge)](#-official-authentic-extension)
+
+> **🚨 IMPORTANT**: This is the **OFFICIAL** TOON VS Code extension maintained by **Vishal Raut**, an official member of the [TOON Organization](https://github.com/toon-format). Beware of fake extensions with similar names.
+
 Complete language support for TOON (Token-Oriented Object Notation) - a compact, LLM-friendly data format that reduces token usage by 30-60% compared to JSON.
 
 Perfect for developers working with Large Language Models who want to minimize API costs while maintaining data clarity.
+
+## 🔐 Official Authentic Extension
+
+**⚠️ BEWARE OF FAKE EXTENSIONS**: There are multiple extensions in the VS Code marketplace using the "TOON" name. This is the **ONLY OFFICIAL** extension.
+
+### ✅ How to Verify Authenticity:
+
+1. **Publisher**: `vishalraut` (Vishal Raut)
+2. **Extension ID**: `vishalraut.vscode-toon`
+3. **Official Repository**: [github.com/vishalraut2106/vscode-toon](https://github.com/vishalraut2106/vscode-toon)
+4. **TOON Organization Member**: Vishal Raut is an official member of [github.com/toon-format](https://github.com/toon-format)
+5. **Uses Official Package**: `@toon-format/toon` v1.0.0 (official implementation)
+
+### 🚫 Fake Extensions to Avoid:
+- Extensions with different publisher names
+- Extensions not using the official `@toon-format/toon` package
+- Extensions without proper TOON organization affiliation
+
+**Always verify the publisher is `vishalraut` before installing!**
+
+📋 **[Complete Verification Guide →](OFFICIAL-VERIFICATION.md)**
+
+---
 
 ## 📖 Table of Contents
 
@@ -69,11 +99,20 @@ Perfect for developers working with Large Language Models who want to minimize A
 
 ## Installation
 
-Search for "TOON" in the VS Code Extensions marketplace, or install directly:
+> **🚨 SECURITY WARNING**: Only install from the official publisher `vishalraut`. There are fake TOON extensions in the marketplace!
+
+Search for "TOON" in the VS Code Extensions marketplace and look for:
+- **Publisher**: `vishalraut` (Vishal Raut)
+- **Title**: "TOON - Token-Efficient Data Format (OFFICIAL)"
+- **Official Badge**: Look for official verification badges
+
+Or install directly:
 
 ```bash
 code --install-extension vishalraut.vscode-toon
 ```
+
+**⚠️ Do NOT install extensions from other publishers claiming to be TOON extensions!**
 
 ## 🚀 Getting Started
 
@@ -409,12 +448,41 @@ npm run compile
 # Press F5 to launch Extension Development Host
 ```
 
+### CI/CD Pipeline
+This project uses automated CI/CD for:
+- ✅ Automated testing and building
+- 🚀 Automatic marketplace publishing on releases
+- 🔐 Security monitoring and dependency updates
+- 📦 Version management and release automation
+
+**For maintainers**: See [CI/CD Setup Guide](setup-cicd.md) and [Quick Reference](CICD-QUICK-REFERENCE.md)
+
 ## 📄 License
 
 MIT License © 2025 Vishal Raut
+
+## 🏢 Official TOON Organization
+
+This extension is officially maintained by **Vishal Raut**, a verified member of the TOON organization:
+
+- 🏠 **TOON Organization**: [github.com/toon-format](https://github.com/toon-format)
+- 📋 **Official TOON Spec**: [github.com/toon-format/toon](https://github.com/toon-format/toon)
+- 👨‍💻 **Maintainer**: [github.com/vishalraut2106](https://github.com/vishalraut2106)
+- 🔐 **Verification**: [OFFICIAL-VERIFICATION.md](OFFICIAL-VERIFICATION.md)
 
 ## 🙏 Acknowledgments
 
 - [TOON Format](https://github.com/toon-format/toon) - Official TOON specification and implementation
 - [Johann Schopplich](https://github.com/johannschopplich) - TOON creator
 - VS Code Extension API - Microsoft
+
+---
+
+## ⚠️ Final Security Reminder
+
+**This is the ONLY OFFICIAL TOON extension**. Always verify:
+- Publisher: `vishalraut`
+- Extension ID: `vishalraut.vscode-toon`
+- Official repository links to TOON organization
+
+**Report fake extensions to protect the community!**
