@@ -1,6 +1,6 @@
 {
   "name": "vscode-toon",
-  "displayName": "TOON Language Support",
+  "displayName": "TOON Format",
   "description": "Official TOON language support for VS Code. Syntax highlighting, validation, and JSON conversion for Token-Oriented Object Notation.",
   "version": "0.2.6",
   "publisher": "vishalraut",
