@@ -81,6 +81,7 @@ jobs:
       run: |
         gh release create ${{ steps.version.outputs.tag_name }} \
           --title "TOON Extension v${{ steps.version.outputs.new_version }}" \
+          --draft=false \
           --notes "## 🚀 TOON VS Code Extension v${{ steps.version.outputs.new_version }}
           
           ### 📦 What's New
@@ -96,7 +97,7 @@ jobs:
           
           **Full Changelog**: https://github.com/vishalraut2106/vscode-toon/blob/main/CHANGELOG.md"
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.WORKFLOW_PAT }}
     
     - name: Success summary
       run: |
