@@ -2,58 +2,16 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ main ]
   pull_request:
     branches: [ main ]
   release:
-    types: [ published, created ]
-  workflow_dispatch:
+    types: [ published ]
 
 jobs:
-  # Build and Test Job
+  # Build, Test, and Security Check
   build-and-test:
     runs-on: ubuntu-latest
-    
-    strategy:
-      matrix:
-        node-version: [20.x, 22.x]
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    
-    - name: Setup Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    
-    - name: Install dependencies
-      run: npm ci
-    
-    - name: Run linting
-      run: npm run lint
-    
-    - name: Compile TypeScript
-      run: npm run compile
-    
-    - name: Run tests (if available)
-      run: npm test --if-present
-    
-    - name: Package extension
-      run: npm run package
-    
-    - name: Upload VSIX artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: vscode-toon-${{ matrix.node-version }}-${{ github.sha }}
-        path: "*.vsix"
-        retention-days: 30
-
-  # Security and Quality Checks
-  security-check:
-    runs-on: ubuntu-latest
-    needs: build-and-test
     
     steps:
     - name: Checkout code
@@ -71,48 +29,33 @@ jobs:
     - name: Run security audit
       run: npm audit --audit-level=high
     
-    - name: Check for outdated packages
-      run: npm outdated || true
+    - name: Run linting
+      run: npm run lint
+    
+    - name: Compile TypeScript
+      run: npm run compile
+    
+    - name: Run tests (if available)
+      run: npm test --if-present
+    
+    - name: Package extension
+      run: npm run package
     
     - name: Verify official extension
       run: node verify-official.js
-
-  # Pre-release to Test Environment
-  pre-release:
-    runs-on: ubuntu-latest
-    needs: [build-and-test, security-check]
-    if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
     
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20.x'
-        cache: 'npm'
-    
-    - name: Install dependencies
-      run: npm ci
-    
-    - name: Install VSCE
-      run: npm install -g @vscode/vsce
-    
-    - name: Package extension
-      run: vsce package --pre-release
-    
-    - name: Upload pre-release artifact
+    - name: Upload VSIX artifact
       uses: actions/upload-artifact@v4
       with:
-        name: vscode-toon-pre-release-${{ github.sha }}
+        name: vscode-toon-${{ github.sha }}
         path: "*.vsix"
+        retention-days: 30
 
-  # Production Release to Marketplace
-  release-to-marketplace:
+  # Publish to Marketplace (only on release)
+  publish-to-marketplace:
     runs-on: ubuntu-latest
-    needs: [build-and-test, security-check]
-    if: github.event_name == 'release' || github.event_name == 'workflow_dispatch' || (github.ref == 'refs/heads/main' && github.event_name == 'push')
+    needs: build-and-test
+    if: github.event_name == 'release'
     
     steps:
     - name: Checkout code
@@ -127,73 +70,65 @@ jobs:
     - name: Install dependencies
       run: npm ci
     
-    - name: Install VSCE
-      run: npm install -g @vscode/vsce
-    
-    - name: Verify version (for release events only)
-      if: github.event_name == 'release'
+    - name: Get version info
+      id: version
       run: |
         PACKAGE_VERSION=$(node -p "require('./package.json').version")
         RELEASE_TAG=${GITHUB_REF#refs/tags/v}
-        echo "Package version: $PACKAGE_VERSION"
-        echo "Release tag: $RELEASE_TAG"
-        if [ "$PACKAGE_VERSION" != "$RELEASE_TAG" ]; then
-          echo "Version mismatch! Package version ($PACKAGE_VERSION) doesn't match release tag ($RELEASE_TAG)"
+        echo "package_version=$PACKAGE_VERSION" >> $GITHUB_OUTPUT
+        echo "release_tag=$RELEASE_TAG" >> $GITHUB_OUTPUT
+        echo "📦 Package version: $PACKAGE_VERSION"
+        echo "🏷️ Release tag: $RELEASE_TAG"
+    
+    - name: Verify version matches release
+      run: |
+        if [ "${{ steps.version.outputs.package_version }}" != "${{ steps.version.outputs.release_tag }}" ]; then
+          echo "❌ Version mismatch! Package (${{ steps.version.outputs.package_version }}) != Release (${{ steps.version.outputs.release_tag }})"
           exit 1
         fi
+        echo "✅ Version matches release tag"
     
-    - name: Get current version (for manual triggers)
-      if: github.event_name == 'workflow_dispatch'
+    - name: Compile and package
       run: |
-        PACKAGE_VERSION=$(node -p "require('./package.json').version")
-        echo "Publishing current package version: $PACKAGE_VERSION"
+        npm run compile
+        npm run package
     
-    - name: Package extension
-      run: vsce package
+    - name: Install VSCE
+      run: npm install -g @vscode/vsce
     
     - name: Publish to VS Code Marketplace
       env:
         VSCE_PAT: ${{ secrets.VSCE_PAT }}
-      run: vsce publish --packagePath *.vsix
+      run: |
+        echo "🚀 Publishing to VS Code Marketplace..."
+        vsce publish --packagePath *.vsix
+        echo "✅ Successfully published version ${{ steps.version.outputs.package_version }}!"
     
     - name: Publish to Open VSX Registry
       env:
         OVSX_PAT: ${{ secrets.OVSX_PAT }}
       run: |
-        npm install -g ovsx
-        ovsx publish *.vsix -p $OVSX_PAT
+        if [ -n "$OVSX_PAT" ]; then
+          echo "🚀 Publishing to Open VSX Registry..."
+          npm install -g ovsx
+          ovsx publish *.vsix -p $OVSX_PAT
+          echo "✅ Successfully published to Open VSX Registry!"
+        else
+          echo "⚠️ OVSX_PAT not found, skipping Open VSX Registry"
+        fi
       continue-on-error: true
     
-    - name: Upload release artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: vscode-toon-release-${{ github.run_number }}
-        path: "*.vsix"
-    
     - name: Attach VSIX to GitHub Release
-      if: github.event_name == 'release'
       run: |
         VSIX_FILE=$(ls *.vsix | head -1)
         gh release upload ${{ github.event.release.tag_name }} "$VSIX_FILE"
+        echo "✅ VSIX attached to GitHub release"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  # Notification Job
-  notify:
-    runs-on: ubuntu-latest
-    needs: [release-to-marketplace]
-    if: always()
     
-    steps:
-    - name: Notify success
-      if: needs.release-to-marketplace.result == 'success'
+    - name: Success notification
       run: |
-        echo "🎉 Successfully published TOON extension to marketplace!"
-        echo "Release: ${{ github.event.release.tag_name }}"
-    
-    - name: Notify failure
-      if: needs.release-to-marketplace.result == 'failure'
-      run: |
-        echo "❌ Failed to publish TOON extension to marketplace!"
-        echo "Check the logs for details."
-        exit 1
+        echo "🎉 Successfully published TOON extension!"
+        echo "📦 Version: ${{ steps.version.outputs.package_version }}"
+        echo "🔗 Marketplace: https://marketplace.visualstudio.com/items?itemName=vishalraut.vscode-toon"
+        echo "📥 Install: code --install-extension vishalraut.vscode-toon"

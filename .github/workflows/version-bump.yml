@@ -12,19 +12,12 @@ on:
         - patch
         - minor
         - major
-      pre_release:
-        description: 'Create pre-release'
-        required: false
-        default: false
-        type: boolean
 
 jobs:
   version-bump:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      actions: read
-      pull-requests: write
     
     steps:
     - name: Checkout code
@@ -56,37 +49,35 @@ jobs:
         echo "old_version=$OLD_VERSION" >> $GITHUB_OUTPUT
         echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
         echo "tag_name=v$NEW_VERSION" >> $GITHUB_OUTPUT
+        echo "📦 Bumped version: $OLD_VERSION → $NEW_VERSION"
     
     - name: Update CHANGELOG
       run: |
         NEW_VERSION="${{ steps.version.outputs.new_version }}"
         DATE=$(date +%Y-%m-%d)
         
-        # Create new changelog entry
         cat > temp_changelog.md << EOF
         # Change Log
         
-        All notable changes to the "vscode-toon" extension will be documented in this file.
-        
         ## [$NEW_VERSION] - $DATE
         
-        ### Added
+        ### Changed
         - Version bump to $NEW_VERSION
         
         EOF
         
-        # Append existing changelog (skip first 3 lines)
-        tail -n +4 CHANGELOG.md >> temp_changelog.md
+        if [ -f CHANGELOG.md ]; then
+          tail -n +4 CHANGELOG.md >> temp_changelog.md
+        fi
         mv temp_changelog.md CHANGELOG.md
     
-    - name: Commit changes
+    - name: Commit and push changes
       run: |
         git add package.json package-lock.json CHANGELOG.md
         git commit -m "chore: bump version to ${{ steps.version.outputs.new_version }}"
         git push origin main
     
-    - name: Create Release
-      id: create_release
+    - name: Create GitHub Release
       run: |
         gh release create ${{ steps.version.outputs.tag_name }} \
           --title "TOON Extension v${{ steps.version.outputs.new_version }}" \
@@ -100,26 +91,15 @@ jobs:
           code --install-extension vishalraut.vscode-toon
           \`\`\`
           
-          ### 🔐 Verification
-          **Publisher**: \`vishalraut\` (Vishal Raut)  
-          **Extension ID**: \`vishalraut.vscode-toon\`  
-          **Official Repository**: https://github.com/vishalraut2106/vscode-toon  
+          ### 🔐 Official Extension
+          This is the **OFFICIAL** TOON extension by Vishal Raut.
           
-          ### 🏢 Official TOON Organization
-          This extension is officially maintained by Vishal Raut, a verified member of the [TOON Organization](https://github.com/toon-format).
-          
-          ### ⚠️ Security Notice
-          This is the **OFFICIAL** TOON extension. Beware of fake extensions with similar names!
-          
-          ---
-          
-          **Full Changelog**: https://github.com/vishalraut2106/vscode-toon/blob/main/CHANGELOG.md" \
-          ${{ github.event.inputs.pre_release == 'true' && '--prerelease' || '' }}
+          **Full Changelog**: https://github.com/vishalraut2106/vscode-toon/blob/main/CHANGELOG.md"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
-    - name: Output release info
+    - name: Success summary
       run: |
-        echo "🎉 Created release: ${{ steps.version.outputs.tag_name }}"
+        echo "🎉 Release created: ${{ steps.version.outputs.tag_name }}"
         echo "📝 Release URL: https://github.com/vishalraut2106/vscode-toon/releases/tag/${{ steps.version.outputs.tag_name }}"
-        echo "🚀 This will trigger the CI/CD pipeline to publish to marketplace!"
+        echo "🚀 CI/CD pipeline will now automatically publish to marketplace!"
