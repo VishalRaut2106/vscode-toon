@@ -75,13 +75,18 @@ jobs:
       id: version
       run: |
         PACKAGE_VERSION=$(node -p "require('./package.json').version")
-        RELEASE_TAG=${GITHUB_REF#refs/tags/v}
+        if [ "${{ github.event_name }}" = "release" ]; then
+          RELEASE_TAG=${GITHUB_REF#refs/tags/v}
+        else
+          RELEASE_TAG="main-build"
+        fi
         echo "package_version=$PACKAGE_VERSION" >> $GITHUB_OUTPUT
         echo "release_tag=$RELEASE_TAG" >> $GITHUB_OUTPUT
         echo "📦 Package version: $PACKAGE_VERSION"
         echo "🏷️ Release tag: $RELEASE_TAG"
     
     - name: Verify version matches release
+      if: github.event_name == 'release'
       run: |
         if [ "${{ steps.version.outputs.package_version }}" != "${{ steps.version.outputs.release_tag }}" ]; then
           echo "❌ Version mismatch! Package (${{ steps.version.outputs.package_version }}) != Release (${{ steps.version.outputs.release_tag }})"
@@ -101,6 +106,11 @@ jobs:
       env:
         VSCE_PAT: ${{ secrets.VSCE_PAT }}
       run: |
+        if [ -z "$VSCE_PAT" ]; then
+          echo "❌ VSCE_PAT secret is not set!"
+          echo "Please add your Visual Studio Code Marketplace Personal Access Token as a repository secret named 'VSCE_PAT'"
+          exit 1
+        fi
         echo "🚀 Publishing to VS Code Marketplace..."
         vsce publish --packagePath *.vsix
         echo "✅ Successfully published version ${{ steps.version.outputs.package_version }}!"
