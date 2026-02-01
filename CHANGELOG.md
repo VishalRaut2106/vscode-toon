@@ -13,7 +13,11 @@ All notable changes to the TOON VS Code extension.
 - Resolved CI/CD automation issues with workflow triggering
 - Fixed marketplace publishing with proper PAT configuration
 
-## [0.2.7] - 2026-02-01
+## [0.2.8] - 2026-02-01
+
+### Changed
+- Version bump to 0.2.8
+
 
 ### Added
 - Complete CI/CD automation with version bumping
