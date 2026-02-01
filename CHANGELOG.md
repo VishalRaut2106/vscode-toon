@@ -1,6 +1,10 @@
-# Changelog
+# Change Log
 
-All notable changes to the TOON VS Code extension.
+## [0.2.9] - 2026-02-01
+
+### Changed
+- Version bump to 0.2.9
+
 
 ## [0.2.8] - 2026-02-01
 
