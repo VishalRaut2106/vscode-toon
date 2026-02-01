@@ -1,8 +1,14 @@
 {
   "name": "vscode-toon",
+<<<<<<< HEAD
   "displayName": "TOON Language Support",
   "description": "Official TOON language support for VS Code. Syntax highlighting, validation, and JSON conversion for Token-Oriented Object Notation.",
   "version": "0.2.5",
+=======
+  "displayName": "TOON - Token-Efficient Data Format (OFFICIAL)",
+  "description": "🔐 OFFICIAL TOON Extension by Vishal Raut (TOON Organization Member) - Full language support for TOON (Token-Oriented Object Notation). Features syntax highlighting, validation, JSON conversion, and smart formatting to reduce token usage by 30-60%. ⚠️ Beware of fake extensions!",
+  "version": "0.2.7",
+>>>>>>> 65bad5584cd4a765d479d2be60284213900cf979
   "publisher": "vishalraut",
   "engines": {
     "vscode": "^1.80.0",
