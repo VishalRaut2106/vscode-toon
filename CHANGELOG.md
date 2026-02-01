@@ -1,6 +1,10 @@
 # Change Log
 
-## [0.2.6] - 2026-02-01
+## [0.2.7] - 2026-02-01
+
+### Changed
+- Version bump to 0.2.7
+
 
 ### Changed
 - Version bump to 0.2.6
