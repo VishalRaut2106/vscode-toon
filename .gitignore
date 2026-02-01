@@ -1,4 +1,32 @@
-node_modules
-out
+# Dependencies
+node_modules/
+npm-debug.log*
+
+# Build outputs
+out/
 *.vsix
-.vscode-test
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/settings.json
+.vscode/launch.json
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# Test files
+test-*
+*.test.*
+
+# Batch files
+*.bat
+*.cmd
+
+# Backup files
+*.bak
+*.backup

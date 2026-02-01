@@ -1,7 +1,7 @@
 {
   "name": "vscode-toon",
   "displayName": "TOON Format",
-  "description": "Official TOON language support for VS Code. Syntax highlighting, validation, and JSON conversion for Token-Oriented Object Notation.",
+  "description": "TOON language support for VS Code. Syntax highlighting, validation, and JSON conversion for Token-Oriented Object Notation.",
   "version": "0.2.7",
   "publisher": "vishalraut",
   "engines": {
@@ -19,10 +19,6 @@
     "llm",
     "serialization",
     "data-format",
-    "official",
-    "authentic",
-    "toon-organization",
-    "vishal-raut",
     "token-efficient"
   ],
   "icon": "images/toon.png",
@@ -30,18 +26,6 @@
     "color": "#1e1e1e",
     "theme": "dark"
   },
-  "badges": [
-    {
-      "url": "https://img.shields.io/badge/Official-TOON%20Extension-blue?style=flat-square",
-      "href": "https://github.com/toon-format",
-      "description": "Official TOON Extension"
-    },
-    {
-      "url": "https://img.shields.io/badge/Maintained%20by-Vishal%20Raut-green?style=flat-square",
-      "href": "https://github.com/vishalraut2106",
-      "description": "Maintained by Vishal Raut"
-    }
-  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/vishalraut2106/vscode-toon.git"
