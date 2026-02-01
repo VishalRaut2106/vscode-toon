@@ -4,10 +4,9 @@ export class ToonHoverProvider implements vscode.HoverProvider {
   provideHover(
     document: vscode.TextDocument,
     position: vscode.Position,
-    token: vscode.CancellationToken
+    _token: vscode.CancellationToken
   ): vscode.ProviderResult<vscode.Hover> {
     const line = document.lineAt(position.line).text;
-    const wordRange = document.getWordRangeAtPosition(position);
     
     // Array header with length
     if (line.match(/\[\d+\]/)) {

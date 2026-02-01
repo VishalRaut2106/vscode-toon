@@ -5,7 +5,7 @@ export class ToonFormatter implements vscode.DocumentFormattingEditProvider {
   async provideDocumentFormattingEdits(
     document: vscode.TextDocument,
     options: vscode.FormattingOptions,
-    token: vscode.CancellationToken
+    _token: vscode.CancellationToken
   ): Promise<vscode.TextEdit[]> {
     const text = document.getText().trim();
 
