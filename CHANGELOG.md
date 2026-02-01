@@ -1,6 +1,10 @@
 # Change Log
 
-All notable changes to the "vscode-toon" extension will be documented in this file.
+## [0.2.7] - 2026-02-01
+
+### Changed
+- Version bump to 0.2.7
+
 
 ## [0.2.5] - 2026-01-31
 
