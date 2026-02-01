@@ -102,7 +102,23 @@ jobs:
     - name: Install VSCE
       run: npm install -g @vscode/vsce
     
+    - name: Check if version already published
+      id: version_check
+      run: |
+        CURRENT_VERSION="${{ steps.version.outputs.package_version }}"
+        echo "Checking if version $CURRENT_VERSION is already published..."
+        
+        # Try to get info about the current version (will fail if not published)
+        if vsce show vishalraut.vscode-toon@$CURRENT_VERSION > /dev/null 2>&1; then
+          echo "version_exists=true" >> $GITHUB_OUTPUT
+          echo "⚠️ Version $CURRENT_VERSION already exists on marketplace"
+        else
+          echo "version_exists=false" >> $GITHUB_OUTPUT
+          echo "✅ Version $CURRENT_VERSION is new, ready to publish"
+        fi
+
     - name: Publish to VS Code Marketplace
+      if: steps.version_check.outputs.version_exists == 'false'
       env:
         VSCE_PAT: ${{ secrets.VSCE_PAT }}
       run: |
@@ -114,6 +130,12 @@ jobs:
         echo "🚀 Publishing to VS Code Marketplace..."
         vsce publish --packagePath *.vsix
         echo "✅ Successfully published version ${{ steps.version.outputs.package_version }}!"
+
+    - name: Skip publishing (version exists)
+      if: steps.version_check.outputs.version_exists == 'true'
+      run: |
+        echo "⏭️ Skipping marketplace publish - version ${{ steps.version.outputs.package_version }} already exists"
+        echo "💡 To publish a new version, update the version in package.json"
     
     - name: Publish to Open VSX Registry
       env:
