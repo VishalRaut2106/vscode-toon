@@ -7,6 +7,7 @@ on:
     branches: [ main ]
   release:
     types: [ published ]
+  workflow_dispatch:
 
 jobs:
   # Build, Test, and Security Check
@@ -55,7 +56,7 @@ jobs:
   publish-to-marketplace:
     runs-on: ubuntu-latest
     needs: build-and-test
-    if: github.event_name == 'release'
+    if: github.event_name == 'release' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
     
     steps:
     - name: Checkout code
