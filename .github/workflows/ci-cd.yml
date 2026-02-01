@@ -52,11 +52,11 @@ jobs:
         path: "*.vsix"
         retention-days: 30
 
-  # Publish to Marketplace (only on release)
+  # Publish to Marketplace (ONLY on release)
   publish-to-marketplace:
     runs-on: ubuntu-latest
     needs: build-and-test
-    if: github.event_name == 'release' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
+    if: github.event_name == 'release'
     
     steps:
     - name: Checkout code
@@ -75,18 +75,13 @@ jobs:
       id: version
       run: |
         PACKAGE_VERSION=$(node -p "require('./package.json').version")
-        if [ "${{ github.event_name }}" = "release" ]; then
-          RELEASE_TAG=${GITHUB_REF#refs/tags/v}
-        else
-          RELEASE_TAG="main-build"
-        fi
+        RELEASE_TAG=${GITHUB_REF#refs/tags/v}
         echo "package_version=$PACKAGE_VERSION" >> $GITHUB_OUTPUT
         echo "release_tag=$RELEASE_TAG" >> $GITHUB_OUTPUT
         echo "📦 Package version: $PACKAGE_VERSION"
         echo "🏷️ Release tag: $RELEASE_TAG"
     
     - name: Verify version matches release
-      if: github.event_name == 'release'
       run: |
         if [ "${{ steps.version.outputs.package_version }}" != "${{ steps.version.outputs.release_tag }}" ]; then
           echo "❌ Version mismatch! Package (${{ steps.version.outputs.package_version }}) != Release (${{ steps.version.outputs.release_tag }})"
@@ -102,23 +97,7 @@ jobs:
     - name: Install VSCE
       run: npm install -g @vscode/vsce
     
-    - name: Check if version already published
-      id: version_check
-      run: |
-        CURRENT_VERSION="${{ steps.version.outputs.package_version }}"
-        echo "Checking if version $CURRENT_VERSION is already published..."
-        
-        # Try to get info about the current version (will fail if not published)
-        if vsce show vishalraut.vscode-toon@$CURRENT_VERSION > /dev/null 2>&1; then
-          echo "version_exists=true" >> $GITHUB_OUTPUT
-          echo "⚠️ Version $CURRENT_VERSION already exists on marketplace"
-        else
-          echo "version_exists=false" >> $GITHUB_OUTPUT
-          echo "✅ Version $CURRENT_VERSION is new, ready to publish"
-        fi
-
     - name: Publish to VS Code Marketplace
-      if: steps.version_check.outputs.version_exists == 'false'
       env:
         VSCE_PAT: ${{ secrets.VSCE_PAT }}
       run: |
@@ -130,12 +109,6 @@ jobs:
         echo "🚀 Publishing to VS Code Marketplace..."
         vsce publish --packagePath *.vsix
         echo "✅ Successfully published version ${{ steps.version.outputs.package_version }}!"
-
-    - name: Skip publishing (version exists)
-      if: steps.version_check.outputs.version_exists == 'true'
-      run: |
-        echo "⏭️ Skipping marketplace publish - version ${{ steps.version.outputs.package_version }} already exists"
-        echo "💡 To publish a new version, update the version in package.json"
     
     - name: Publish to Open VSX Registry
       env:
@@ -152,6 +125,7 @@ jobs:
       continue-on-error: true
     
     - name: Attach VSIX to GitHub Release
+      if: github.event_name == 'release'
       run: |
         VSIX_FILE=$(ls *.vsix | head -1)
         gh release upload ${{ github.event.release.tag_name }} "$VSIX_FILE"
