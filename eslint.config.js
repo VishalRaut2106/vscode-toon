@@ -24,7 +24,7 @@ module.exports = [
     },
     rules: {
       '@typescript-eslint/naming-convention': 'warn',
-      '@typescript-eslint/no-unused-vars': 'warn',
+      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
       'curly': 'warn',
       'eqeqeq': 'warn',
       'no-throw-literal': 'warn',
