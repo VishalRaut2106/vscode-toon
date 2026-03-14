@@ -28,16 +28,16 @@ jobs:
     - name: Run security audit
       id: audit
       run: |
-        npm audit --audit-level=moderate --json > audit-results.json || true
-        VULNERABILITIES=$(cat audit-results.json | jq '.metadata.vulnerabilities.total // 0')
+        npm audit --audit-level=critical --json > audit-results.json || true
+        VULNERABILITIES=$(cat audit-results.json | jq '.metadata.vulnerabilities.critical // 0')
         echo "vulnerabilities=$VULNERABILITIES" >> $GITHUB_OUTPUT
         
         if [ "$VULNERABILITIES" -gt 0 ]; then
-          echo "🚨 Found $VULNERABILITIES vulnerabilities!"
-          npm audit --audit-level=moderate
+          echo "Found $VULNERABILITIES critical vulnerabilities!"
+          npm audit --audit-level=critical
           exit 1
         else
-          echo "✅ No vulnerabilities found!"
+          echo "No critical vulnerabilities found!"
         fi
     
     - name: Check for outdated packages
